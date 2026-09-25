@@ -15,27 +15,31 @@
     <script src="app.js" defer></script>
 </head>
 <body>
-    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+    <a class="skip-link" href="#conteudo" data-i18n="skipLink">Pular para o conteúdo</a>
 
     <header class="site-header">
-        <nav class="container nav-shell" aria-label="Navegação principal">
-            <a class="brand" href="#inicio" aria-label="Diego Davis Melo, voltar ao início">Diego<span class="brand-accent">.</span></a>
+        <nav class="container nav-shell" aria-label="Navegação principal" data-i18n-aria-label="mainNavigation">
+            <a class="brand" href="#inicio" aria-label="Diego Davis Melo, voltar ao início" data-i18n-aria-label="brandLabel">Diego<span class="brand-accent">.</span></a>
             <div class="nav-links" id="nav-links">
-                <a href="#projetos">Projetos</a>
-                <a href="#experiencia">Experiência</a>
-                <a href="#sobre">Sobre</a>
-                <a href="mailto:diegodvsmelo@gmail.com">Contato</a>
+                <a href="#projetos" data-i18n="navProjects">Projetos</a>
+                <a href="#experiencia" data-i18n="navExperience">Experiência</a>
+                <a href="#sobre" data-i18n="navAbout">Sobre</a>
+                <a href="mailto:diegodvsmelo@gmail.com" data-i18n="navContact">Contato</a>
+            </div>
+            <div class="language-switcher" role="group" aria-label="Idioma do site" data-i18n-aria-label="languageGroup">
+                <button type="button" data-language="pt" lang="pt-BR" aria-label="Português" aria-pressed="true">PT</button>
+                <button type="button" data-language="en" lang="en" aria-label="English" aria-pressed="false">EN</button>
             </div>
             <button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Abrir menu">
                 <span></span><span></span><span></span>
             </button>
         </nav>
-        <nav class="mobile-nav" id="mobile-nav" aria-label="Navegação móvel" hidden>
-            <a href="#projetos">Projetos</a>
-            <a href="#experiencia">Experiência</a>
-            <a href="#sobre">Sobre</a>
-            <a href="#competencias">Competências</a>
-            <a href="mailto:diegodvsmelo@gmail.com">Contato</a>
+        <nav class="mobile-nav" id="mobile-nav" aria-label="Navegação móvel" data-i18n-aria-label="mobileNavigation" hidden>
+            <a href="#projetos" data-i18n="navProjects">Projetos</a>
+            <a href="#experiencia" data-i18n="navExperience">Experiência</a>
+            <a href="#sobre" data-i18n="navAbout">Sobre</a>
+            <a href="#competencias" data-i18n="navSkills">Competências</a>
+            <a href="mailto:diegodvsmelo@gmail.com" data-i18n="navContact">Contato</a>
         </nav>
     </header>
 
@@ -44,34 +48,34 @@
             <div class="hero-decor hero-decor--left" aria-hidden="true"><span></span><span></span></div>
             <div class="hero-decor hero-decor--right" aria-hidden="true"><span></span><span></span></div>
             <div class="hero-content">
-                <p class="hero-intro"><img src="FotoPerfil.jpeg" alt="Foto de Diego Davis Melo" width="42" height="42"> Olá, eu sou <span>Diego Davis Melo</span><span class="intro-spark" aria-hidden="true">✦</span></p>
-                <h1 id="hero-title">Desenvolvedor de jogos <span>&amp; sistemas interativos.</span></h1>
-                <p class="hero-description">Graduando em Sistemas de Informação na UFPE. Desenvolvo jogos em Unity e C#, com foco em progressão, interfaces e arquitetura modular.</p>
+                <p class="hero-intro" data-i18n="heroGreeting"><img src="FotoPerfil.jpeg" alt="Foto de Diego Davis Melo" data-i18n-alt="profileAlt" width="42" height="42"> Olá, eu sou <span class="hero-name">Diego Davis Melo</span><span class="intro-spark" aria-hidden="true">✦</span></p>
+                <h1 id="hero-title" data-i18n="heroTitle">Desenvolvedor de jogos <span data-i18n="heroTitleAccent">&amp; sistemas interativos.</span></h1>
+                <p class="hero-description" data-i18n="heroDescription">Graduando em Sistemas de Informação na UFPE. Desenvolvo jogos em Unity e C#, com foco em progressão, interfaces e arquitetura modular.</p>
                 <div class="hero-actions">
-                    <a class="button button--primary" href="#projetos">Explorar projetos <span aria-hidden="true">↗</span></a>
-                    <a class="button button--ghost" href="#sobre">Mais sobre mim <span aria-hidden="true">↓</span></a>
+                    <a class="button button--primary" href="#projetos" data-i18n="exploreProjects">Explorar projetos <span aria-hidden="true">↗</span></a>
+                    <a class="button button--ghost" href="#sobre" data-i18n="moreAbout">Mais sobre mim <span aria-hidden="true">↓</span></a>
                 </div>
             </div>
-            <div class="hero-socials" aria-label="Links de Diego">
-                <span>Encontre-me</span>
-                <a href="https://github.com/diegodvsmelo" target="_blank" rel="noopener noreferrer" aria-label="GitHub de Diego Davis Melo, abre em nova aba">GitHub <span aria-hidden="true">↗</span></a>
-                <a href="mailto:diegodvsmelo@gmail.com" aria-label="Enviar email para Diego Davis Melo">E-mail <span aria-hidden="true">↗</span></a>
+            <div class="hero-socials" aria-label="Links de Diego" data-i18n-aria-label="socialLinks">
+                <span data-i18n="findMe">Encontre-me</span>
+                <a href="https://github.com/diegodvsmelo" target="_blank" rel="noopener noreferrer" aria-label="GitHub de Diego Davis Melo, abre em nova aba" data-i18n-aria-label="githubLabel">GitHub <span aria-hidden="true">↗</span></a>
+                <a href="mailto:diegodvsmelo@gmail.com" aria-label="Enviar email para Diego Davis Melo" data-i18n="emailLabel" data-i18n-aria-label="emailLinkLabel">E-mail <span aria-hidden="true">↗</span></a>
             </div>
         </section>
 
         <section class="about section" id="sobre" aria-labelledby="about-title">
             <div class="container about-grid">
                 <div class="about-copy">
-                    <p class="eyebrow">01 / Sobre mim</p>
-                    <h2 id="about-title">Ideias ganham vida <span>quando viram jogo.</span></h2>
-                    <p>Atuo no desenvolvimento de jogos digitais, sistemas interativos e pesquisa acadêmica. Em Unity e C#, trabalho com mecânicas de progressão, economia, interfaces e tutoriais.</p>
-                    <p>Organizo o código para que cada sistema possa evoluir com clareza. Tenho interesse em jogos 2D e 3D, gameplay, systems design e game design.</p>
-                    <a class="text-link" href="mailto:diegodvsmelo@gmail.com">Vamos criar algo juntos <span aria-hidden="true">↗</span></a>
+                    <p class="eyebrow" data-i18n="aboutEyebrow">01 / Sobre mim</p>
+                    <h2 id="about-title" data-i18n="aboutTitle">Ideias ganham vida <span data-i18n="aboutTitleAccent">quando viram jogo.</span></h2>
+                    <p data-i18n="aboutDescriptionOne">Atuo no desenvolvimento de jogos digitais, sistemas interativos e pesquisa acadêmica. Em Unity e C#, trabalho com mecânicas de progressão, economia, interfaces e tutoriais.</p>
+                    <p data-i18n="aboutDescriptionTwo">Organizo o código para que cada sistema possa evoluir com clareza. Tenho interesse em jogos 2D e 3D, gameplay, systems design e game design.</p>
+                    <a class="text-link" href="mailto:diegodvsmelo@gmail.com" data-i18n="aboutCta">Vamos criar algo juntos <span aria-hidden="true">↗</span></a>
                 </div>
-                <div class="about-facts" aria-label="Dados do portfólio">
-                    <div class="fact"><strong>06</strong><span>Projetos apresentados</span></div>
-                    <div class="fact"><strong id="skills-count">09</strong><span>Áreas de competência</span></div>
-                    <div class="fact"><strong>2028</strong><span>Conclusão prevista em Sistemas de Informação, CIn-UFPE</span></div>
+                <div class="about-facts" aria-label="Dados do portfólio" data-i18n-aria-label="portfolioFacts">
+                    <div class="fact"><strong>06</strong><span data-i18n="projectsCountLabel">Projetos apresentados</span></div>
+                    <div class="fact"><strong id="skills-count">09</strong><span data-i18n="skillsCountLabel">Áreas de competência</span></div>
+                    <div class="fact"><strong>2028</strong><span data-i18n="graduationFact">Conclusão prevista em Sistemas de Informação, CIn-UFPE</span></div>
                 </div>
             </div>
         </section>
@@ -80,26 +84,26 @@
             <div class="container">
                 <div class="section-heading section-heading--split">
                     <div>
-                        <p class="eyebrow">02 / Experiência</p>
-                        <h2 id="journey-title">Da pesquisa ao jogo.</h2>
-                        <p>Uma experiência profissional em desenvolvimento Unity, apoiada por formação acadêmica e prática contínua.</p>
+                        <p class="eyebrow" data-i18n="experienceEyebrow">02 / Experiência</p>
+                        <h2 id="journey-title" data-i18n="experienceTitle">Da pesquisa ao jogo.</h2>
+                        <p data-i18n="experienceIntro">Uma experiência profissional em desenvolvimento Unity, apoiada por formação acadêmica e prática contínua.</p>
                     </div>
                 </div>
                 <article class="experience-feature">
                     <div class="experience-feature-head">
-                        <span class="experience-badge">Bolsa BFI-10 · UFPE/FACEPE</span>
-                        <span class="experience-period">Fev 2026 – Set 2026</span>
+                        <span class="experience-badge" data-i18n="experienceBadge">Bolsa BFI-10 · UFPE/FACEPE</span>
+                        <span class="experience-period" data-i18n="experiencePeriod">Fev 2026 – Set 2026</span>
                     </div>
-                    <h3>Desenvolvedor Unity</h3>
-                    <p class="experience-place">Laboratório de Concepção e Análise de Artefatos Inteligentes (LaCA²I)</p>
-                    <p>Atuei no desenvolvimento do EITA!, jogo mobile incremental de educação ambiental, em uma iniciativa que também aborda gamificação, realidade aumentada e acessibilidade informacional. Trabalhei em sistemas de jogo, progressão, tutoriais e feedback visual.</p>
-                    <button class="button button--outline" type="button" data-open-project="eita">Conhecer o projeto EITA! <span aria-hidden="true">↗</span></button>
+                    <h3 data-i18n="experienceRole">Desenvolvedor Unity</h3>
+                    <p class="experience-place" data-i18n="experiencePlace">Laboratório de Concepção e Análise de Artefatos Inteligentes (LaCA²I)</p>
+                    <p data-i18n="experienceDescription">Atuei no desenvolvimento do EITA!, jogo mobile incremental de educação ambiental, em uma iniciativa que também aborda gamificação, realidade aumentada e acessibilidade informacional. Trabalhei em sistemas de jogo, progressão, tutoriais e feedback visual.</p>
+                    <button class="button button--outline" type="button" data-open-project="eita" data-i18n="experienceProjectCta">Conhecer o projeto EITA! <span aria-hidden="true">↗</span></button>
                 </article>
                 <div class="journey-grid">
-                    <article class="journey-card"><p class="journey-card-label">Formação acadêmica</p><h3>Sistemas de Informação</h3><p>CIn / Universidade Federal de Pernambuco. Início em março de 2025; 30% concluído. Conclusão prevista para dezembro de 2028.</p></article>
-                    <article class="journey-card"><p class="journey-card-label">Formação complementar</p><h3>Unity Learn</h3><p>Unity Essentials Pathway concluído. Junior Programmer Pathway: 77% concluído.</p></article>
-                    <article class="journey-card"><p class="journey-card-label">Produção acadêmica</p><h3>Livro acadêmico · 2025</h3><p>Coautor do capítulo 3 e revisor técnico dos demais capítulos de “Sistemas de Informação para Iniciantes – 2ª Edição”.</p></article>
-                    <article class="journey-card"><p class="journey-card-label">Idiomas</p><h3>Português e inglês</h3><p>Português nativo. Inglês avançado em leitura e escrita, com conversação intermediária.</p></article>
+                    <article class="journey-card"><p class="journey-card-label" data-i18n="academicLabel">Formação acadêmica</p><h3 data-i18n="academicTitle">Sistemas de Informação</h3><p data-i18n="academicDescription">CIn / Universidade Federal de Pernambuco. Início em março de 2025; 30% concluído. Conclusão prevista para dezembro de 2028.</p></article>
+                    <article class="journey-card"><p class="journey-card-label" data-i18n="learningLabel">Formação complementar</p><h3>Unity Learn</h3><p data-i18n="learningDescription">Unity Essentials Pathway concluído. Junior Programmer Pathway: 77% concluído.</p></article>
+                    <article class="journey-card"><p class="journey-card-label" data-i18n="bookLabel">Produção acadêmica</p><h3 data-i18n="bookTitle">Livro acadêmico · 2025</h3><p data-i18n="bookDescription">Coautor do capítulo 3 e revisor técnico dos demais capítulos de “Sistemas de Informação para Iniciantes – 2ª Edição”.</p></article>
+                    <article class="journey-card"><p class="journey-card-label" data-i18n="languagesLabel">Idiomas</p><h3 data-i18n="languagesTitle">Português e inglês</h3><p data-i18n="languagesDescription">Português nativo. Inglês avançado em leitura e escrita, com conversação intermediária.</p></article>
                 </div>
             </div>
         </section>
@@ -107,12 +111,12 @@
         <section class="skills section" id="competencias" aria-labelledby="skills-title">
             <div class="container">
                 <div class="section-heading section-heading--center">
-                    <p class="eyebrow">03 / O que faço</p>
-                    <h2 id="skills-title">Competências-chave</h2>
-                    <p>Da lógica do jogo à estrutura que permite evoluir cada ideia.</p>
+                    <p class="eyebrow" data-i18n="skillsEyebrow">03 / O que faço</p>
+                    <h2 id="skills-title" data-i18n="skillsTitle">Competências-chave</h2>
+                    <p data-i18n="skillsIntro">Da lógica do jogo à estrutura que permite evoluir cada ideia.</p>
                 </div>
                 <div class="skills-grid" id="skills-grid"></div>
-                <div class="interests"><p>Áreas de interesse</p><div><span>Jogos 2D e 3D</span><span>Gameplay e Systems Design</span><span>Game Design</span></div></div>
+                <div class="interests"><p data-i18n="interestsLabel">Áreas de interesse</p><div><span data-i18n="interestGames">Jogos 2D e 3D</span><span data-i18n="interestGameplay">Gameplay e Systems Design</span><span>Game Design</span></div></div>
                 <noscript><p>Ative o JavaScript para ver as competências e os projetos.</p></noscript>
             </div>
         </section>
@@ -121,11 +125,11 @@
             <div class="container">
                 <div class="section-heading section-heading--split">
                     <div>
-                        <p class="eyebrow">04 / Portfólio</p>
-                        <h2 id="projects-title">Projetos em destaque</h2>
-                        <p>Selecione um projeto para ver o contexto, as entregas e as tecnologias utilizadas.</p>
+                        <p class="eyebrow" data-i18n="projectsEyebrow">04 / Portfólio</p>
+                        <h2 id="projects-title" data-i18n="projectsTitle">Projetos em destaque</h2>
+                        <p data-i18n="projectsIntro">Selecione um projeto para ver o contexto, as entregas e as tecnologias utilizadas.</p>
                     </div>
-                    <a class="button button--outline" href="https://github.com/diegodvsmelo" target="_blank" rel="noopener noreferrer">Ver GitHub <span aria-hidden="true">↗</span></a>
+                    <a class="button button--outline" href="https://github.com/diegodvsmelo" target="_blank" rel="noopener noreferrer" data-i18n="viewGithub">Ver GitHub <span aria-hidden="true">↗</span></a>
                 </div>
                 <div class="projects-grid" id="projects-grid"></div>
             </div>
@@ -137,16 +141,24 @@
         <div class="dialog-panel">
             <div class="dialog-header">
                 <div><p class="eyebrow" id="project-dialog-category">Projeto</p><h2 id="project-dialog-title"></h2><p class="dialog-period" id="project-dialog-period"></p></div>
-                <button class="dialog-close" id="project-dialog-close" type="button" aria-label="Fechar detalhes do projeto">×</button>
+                <button class="dialog-close" id="project-dialog-close" type="button" aria-label="Fechar detalhes do projeto" data-i18n-aria-label="closeProject">×</button>
             </div>
             <div class="dialog-content" id="project-dialog-content"></div>
         </div>
     </dialog>
 
+    <aside class="mail-fallback" id="mail-fallback" aria-label="Ajuda para abrir o email" data-i18n-aria-label="mailHelpLabel" hidden>
+        <button class="mail-fallback-close" id="mail-fallback-close" type="button" aria-label="Fechar ajuda para email" data-i18n-aria-label="closeMailHelp">×</button>
+        <p id="mail-fallback-message" role="status" aria-live="polite"></p>
+        <p class="mail-address">diegodvsmelo@gmail.com</p>
+        <button class="button button--primary mail-copy" id="copy-email" type="button" data-i18n="copyEmail">Copiar email</button>
+        <p class="mail-copy-status" id="mail-copy-status" role="status" aria-live="polite" hidden></p>
+    </aside>
+
     <footer class="site-footer">
         <div class="container footer-inner">
-            <p>© <span id="year">2026</span> Diego Davis Melo. Feito com atenção aos detalhes.</p>
-            <div class="footer-links"><a href="https://github.com/diegodvsmelo" target="_blank" rel="noopener noreferrer">GitHub ↗</a><a href="mailto:diegodvsmelo@gmail.com">E-mail ↗</a><a href="#inicio">Voltar ao topo ↑</a></div>
+            <p>© <span id="year">2026</span> Diego Davis Melo.</p>
+            <div class="footer-links"><a href="https://github.com/diegodvsmelo" target="_blank" rel="noopener noreferrer">GitHub ↗</a><a href="mailto:diegodvsmelo@gmail.com" data-i18n="footerEmail">E-mail ↗</a><a href="#inicio" data-i18n="backToTop">Voltar ao topo ↑</a></div>
         </div>
     </footer>
 </body>
