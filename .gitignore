@@ -1,0 +1,7 @@
+# Credenciais locais e backend PHP antigo não pertencem ao site público.
+smtp-config.php
+enviar_email.php
+.env
+.env.*
+_site/
+node_modules/
