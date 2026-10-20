@@ -23,8 +23,10 @@ jobs:
       - name: Separar apenas os arquivos públicos
         run: |
           mkdir -p _site/data
-          cp index.html styles.css app.js favicon.svg FotoPerfil.jpeg .nojekyll _site/
+          cp index.html styles.css app.js game-support.js favicon.svg FotoPerfil.jpeg .nojekyll _site/
           cp data/site-data.js _site/data/
+          cp data/dinoforce-build.js _site/data/
+          cp -R jogos _site/jogos
       - name: Enviar artefato estático
         uses: actions/upload-pages-artifact@v4
         with:

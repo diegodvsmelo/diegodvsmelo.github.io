@@ -143,6 +143,8 @@ function contentForLanguage() {
 }
 
 function preferredLanguage() {
+    const explicit = new URLSearchParams(location.search).get("lang");
+    if (["pt", "en"].includes(explicit)) return explicit;
     try {
         const saved = localStorage.getItem("portfolio-language");
         if (saved === "pt" || saved === "en") return saved;
@@ -254,7 +256,7 @@ function renderProjectDetails(project) {
         </section>` : ""}
         <section class="detail-section" aria-labelledby="detail-tech-title"><h3 id="detail-tech-title">${escapeHtml(textFor("technologies"))}</h3><div class="detail-chips">${technologies.map((item) => `<span>${escapeHtml(item)}</span>`).join("")}</div></section>
         ${competencies.length ? `<section class="detail-section" aria-labelledby="detail-skills-title"><h3 id="detail-skills-title">${escapeHtml(textFor("competencies"))}</h3><div class="detail-chips">${competencies.map((item) => `<span>${escapeHtml(item)}</span>`).join("")}</div></section>` : ""}
-        <div class="detail-footer"><a class="button button--primary" href="${escapeHtml(link)}"${linkAttrs}>${escapeHtml(linkLabel)} <span aria-hidden="true">↗</span></a>${!isRepository ? `<p>${escapeHtml(textFor("mailProjectHint"))}</p>` : ""}</div>
+        <div class="detail-footer"><a class="button button--primary" href="${escapeHtml(link)}"${linkAttrs}>${escapeHtml(linkLabel)} <span aria-hidden="true">↗</span></a>${project.visual === "dinoforce" ? `<button type="button" class="button button--primary" data-try-dinoforce ${portfolioGame.isMobileDevice() ? 'disabled aria-describedby="desktop-only-note"' : ""}>${currentLanguage === "en" ? "Try game" : "Testar"}</button>${portfolioGame.isMobileDevice() ? `<p id="desktop-only-note">${portfolioGame.desktopOnly[currentLanguage]}</p>` : ""}` : ""}${!isRepository ? `<p>${escapeHtml(textFor("mailProjectHint"))}</p>` : ""}</div>
     `;
 }
 
@@ -405,6 +407,11 @@ function setupLanguageSwitcher() {
     document.querySelectorAll(".language-switcher [data-language]").forEach((button) => {
         button.addEventListener("click", () => {
             setLanguage(button.dataset.language);
+            const url = new URL(location.href);
+            if (url.searchParams.has("lang")) {
+                url.searchParams.set("lang", currentLanguage);
+                history.replaceState(history.state, "", url);
+            }
             try {
                 localStorage.setItem("portfolio-language", currentLanguage);
             } catch {
@@ -498,4 +505,36 @@ setupClickJuice();
 setupLanguageSwitcher();
 setupMailFallback();
 setLanguage(preferredLanguage());
+
+document.addEventListener("click", (event) => {
+    if (!event.target.closest("[data-try-dinoforce]") || portfolioGame.isMobileDevice()) return;
+    const url = new URL("jogos/dinoforce/", location.href);
+    url.searchParams.set("lang", currentLanguage);
+    // Only navigation state; never game progress. URL also works without storage.
+    url.searchParams.set("returnY", String(Math.round(window.scrollY)));
+    url.searchParams.set("panelY", String(document.getElementById("project-dialog-content").scrollTop));
+    const returnUrl = new URL(location.href);
+    for (const key of ["lang", "returnY", "panelY"]) returnUrl.searchParams.set(key, url.searchParams.get(key));
+    returnUrl.searchParams.set("project", "dinoforce");
+    returnUrl.hash = "projetos";
+    history.replaceState(history.state, "", returnUrl);
+    location.assign(url);
+});
+
+function restoreDinoForcePanel() {
+    const params = new URLSearchParams(location.search);
+    if (params.get("project") !== "dinoforce") return;
+    const trigger = document.querySelector('[data-open-project="dinoforce"]');
+    if (!trigger) return;
+    const restore = () => {
+        const y = Number(params.get("returnY"));
+        if (params.has("returnY") && Number.isFinite(y) && y >= 0) window.scrollTo({ top: y, behavior: "instant" });
+        else document.getElementById("projetos").scrollIntoView({ behavior: "instant" });
+        if (!document.getElementById("project-dialog").open) trigger.click();
+        const panelY = Number(params.get("panelY"));
+        if (Number.isFinite(panelY) && panelY >= 0) document.getElementById("project-dialog-content").scrollTop = panelY;
+    };
+    (document.fonts?.ready || Promise.resolve()).then(() => requestAnimationFrame(restore));
+}
+restoreDinoForcePanel();
 document.getElementById("year").textContent = new Date().getFullYear();

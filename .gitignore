@@ -5,3 +5,4 @@ enviar_email.php
 .env.*
 _site/
 node_modules/
+.utmp/

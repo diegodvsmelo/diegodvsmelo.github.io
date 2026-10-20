@@ -282,3 +282,26 @@ window.siteData = {
         ]
     }
 };
+
+// Verified against the supplied Web export and the game's existing input code.
+// Editorial status and authorship must be supplied by the project owner.
+for (const [language, content] of Object.entries({
+    pt: {
+        category: "Tower defense 3D", period: "Web",
+        description: "Tower defense com torres de dinossauros, ondas de inimigos, melhorias e fusões em megazords.",
+        controls: "Use o mouse para comprar, posicionar e selecionar torres. Clique com o botão esquerdo para confirmar. Use Escape ou o botão direito do mouse para cancelar o posicionamento.",
+        status: null, credits: null
+    },
+    en: {
+        category: "3D tower defense", period: "Web",
+        description: "Tower defense with dinosaur towers, enemy waves, upgrades, and megazord fusions.",
+        controls: "Use the mouse to buy, place, and select towers. Left-click to confirm. Press Escape or right-click to cancel placement.",
+        status: null, credits: null
+    }
+})) {
+    window.siteData[language].projects.push({
+        title: "DinoForce", visual: "dinoforce", ...content,
+        stack: ["Unity", "C#", "WebGL"],
+        link: "https://github.com/diegodvsmelo/Jogos-Digitais-26.2"
+    });
+}

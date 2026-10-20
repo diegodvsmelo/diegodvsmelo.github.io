@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#22232e">
+    <title>DinoForce | Diego Davis Melo</title>
+    <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles.css?v=20261020-1">
+    <link rel="stylesheet" href="game.css?v=20261020-1">
+    <script src="../../game-support.js?v=20261020-1" defer></script>
+    <script src="../../data/site-data.js?v=20261020-1" defer></script>
+    <script src="../../data/dinoforce-build.js?v=20261020-1" defer></script>
+    <script src="game.js?v=20261020-1" defer></script>
+</head>
+<body class="game-page">
+    <main class="game-layout">
+        <nav class="game-navigation" aria-label="DinoForce"><a class="button button--outline" id="back" href="../../?project=dinoforce#projetos">← <span data-game-text="back">Voltar aos projetos</span></a></nav>
+        <section class="game-stage" aria-label="DinoForce">
+            <div class="game-player" id="game-player">
+                <div id="frame-host"></div>
+                <div class="game-overlay" id="loading">
+                    <div class="loading-panel">
+                        <p class="eyebrow">DinoForce</p>
+                        <p id="status" role="status" aria-live="polite">Carregando o jogo…</p>
+                        <progress id="progress" max="1" aria-label="DinoForce"></progress>
+                        <output id="percent" aria-live="off"></output>
+                        <button class="button button--primary" id="retry" type="button" hidden data-game-text="retry">Tentar novamente</button>
+                    </div>
+                </div>
+            </div>
+            <div class="game-toolbar"><button class="button button--outline" id="fullscreen" type="button" disabled data-game-text="fullscreen">Tela cheia</button><span id="fullscreen-note" role="status"></span></div>
+        </section>
+        <article class="game-details" id="game-details"></article>
+    </main>
+    <dialog class="project-dialog exit-dialog" id="exit-dialog" aria-labelledby="exit-title" aria-describedby="exit-description">
+        <div class="dialog-panel">
+            <h2 id="exit-title" data-game-text="exitTitle">Sair do DinoForce?</h2>
+            <p id="exit-description" data-game-text="exitDescription">Sair encerra esta sessão e pode perder o progresso. A retomada da partida não é garantida.</p>
+            <div class="detail-footer"><button class="button button--primary" id="continue" type="button" data-game-text="continue">Continuar jogando</button><button class="button button--outline" id="exit" type="button" data-game-text="exit">Sair do jogo</button></div>
+        </div>
+    </dialog>
+    <noscript>JavaScript é necessário para jogar. / JavaScript is required to play.</noscript>
+</body>
+</html>

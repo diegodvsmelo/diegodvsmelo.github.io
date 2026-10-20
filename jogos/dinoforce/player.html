@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DinoForce player</title>
+    <link rel="stylesheet" href="../../styles.css?v=20261020-1">
+    <link rel="stylesheet" href="player.css?v=20261020-1">
+    <script src="../../game-support.js?v=20261020-1" defer></script>
+    <script src="../../data/dinoforce-build.js?v=20261020-1" defer></script>
+    <script src="player.js?v=20261020-1" defer></script>
+</head>
+<body>
+    <canvas id="unity-canvas" width="1280" height="720" tabindex="0" aria-label="DinoForce"></canvas>
+    <div class="player-overlay" id="resume-overlay" hidden><p id="pause-text"></p><button class="button button--primary" id="resume-game" type="button"></button></div>
+    <div class="player-overlay" id="audio-overlay" hidden><button class="button button--primary" id="start-game" type="button"></button><p id="audio-text"></p></div>
+    <p id="storage-warning" role="status" hidden></p>
+</body>
+</html>

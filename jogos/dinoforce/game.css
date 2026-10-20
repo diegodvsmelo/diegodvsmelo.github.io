@@ -1,0 +1,25 @@
+.game-layout { width: calc(100% - 40px); max-width: 1600px; margin: 0 auto; }
+.game-navigation { min-height: 80px; display: flex; align-items: center; }
+.game-stage { display: grid; justify-items: center; gap: 12px; }
+.game-player { position: relative; width: min(100%, calc((100dvh - 156px) * 16 / 9)); min-width: min(100%, 320px); aspect-ratio: 16 / 9; background: #10151c; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+#frame-host, #frame-host iframe { display: block; border: 0; width: 100%; height: 100%; }
+#frame-host { position: absolute; inset: 0; }
+.game-overlay { position: absolute; inset: 0; display: grid; place-items: center; padding: 20px; background: var(--surface-soft); }
+.loading-panel { width: min(100%, 460px); text-align: center; }
+.loading-panel .eyebrow { font: 700 clamp(1.4rem, 3vw, 2.3rem) "Space Grotesk", sans-serif; color: var(--accent); margin: 0 0 14px; }
+.loading-panel progress { display: block; width: 100%; height: 12px; margin: 20px 0 8px; accent-color: var(--accent); }
+.loading-panel output { color: var(--muted); }
+.loading-panel .button { margin-top: 16px; }
+.game-toolbar { min-height: 44px; display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
+.game-toolbar span { font-size: .8rem; color: var(--muted); }
+.game-details { max-width: 1000px; margin: 40px auto 80px; padding: clamp(20px, 4vw, 40px); border: 1px solid var(--line); background: var(--surface-soft); border-radius: 16px; }
+.game-details h1 { font: 700 clamp(2rem, 5vw, 3rem) "Space Grotesk", sans-serif; margin: 0 0 12px; }
+.game-details h2 { font: 600 1.2rem "Space Grotesk", sans-serif; color: var(--accent); margin-top: 28px; }
+.game-details p { color: var(--muted); }
+.game-player:fullscreen { width: 100vw; height: 100dvh; max-width: none; border: 0; border-radius: 0; display: grid; place-items: center; background: #10151c; }
+.game-player:fullscreen #frame-host { position: relative; width: min(100vw, calc(100dvh * 16 / 9)); height: min(100dvh, calc(100vw * 9 / 16)); }
+.exit-dialog { max-width: 600px; }
+.exit-dialog h2 { font-family: "Space Grotesk", sans-serif; }
+.exit-dialog p { color: var(--muted); }
+button:disabled { opacity: .5; cursor: not-allowed; }
+@media (max-width: 520px) { .game-layout { width: calc(100% - 24px); } .game-navigation { min-height: 72px; } }
