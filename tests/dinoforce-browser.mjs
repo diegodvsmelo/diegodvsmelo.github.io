@@ -1,5 +1,5 @@
 // Uses a fresh headless desktop browser profile; does not attach to personal tabs.
-// Usage: node Tests/WebBrowserSmoke.mjs <browser.exe> [url] [output-directory] [port]
+// Usage: node tests/dinoforce-browser.mjs <browser.exe> [url] [output-directory] [port]
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
@@ -23,6 +23,7 @@ const browser = spawn(executable, [
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 let socket;
 const events = [];
+const allEvents = [];
 try {
   let target;
   for (let attempt = 0; attempt < 100; attempt++) {
@@ -40,6 +41,7 @@ try {
   const pending = new Map();
   socket.onmessage = message => {
     const data = JSON.parse(message.data);
+    if (!data.id) allEvents.push(data);
     if (data.id) {
       const operation = pending.get(data.id);
       pending.delete(data.id);
@@ -112,7 +114,7 @@ try {
   await evaluate(`document.querySelector('[data-language="pt"]').click()`);
   assert(await evaluate(`document.documentElement.lang === 'pt-BR' && new URLSearchParams(location.search).get('lang') === 'pt'`), 'Language switch updates explicit URL');
   await evaluate(`document.querySelector('[data-language="en"]').click()`);
-  assert(!events.some(e => e.params?.response?.url.includes('/releases/')), 'Portfolio makes no build requests');
+  assert(!events.some(e => e.params?.response?.url.includes('/player/')), 'Portfolio makes no build requests');
   await evaluate(`document.querySelector('[data-open-project="codice"]').click()`);
   assert(await evaluate(`document.getElementById('project-dialog').open && !document.querySelector('[data-try-dinoforce]')`), 'Other project panel preserved without Try game');
   await evaluate(`document.getElementById('project-dialog').close()`);
@@ -151,6 +153,11 @@ try {
   await evaluate(`document.exitFullscreen()`);
   await waitFor(`!document.fullscreenElement && document.getElementById('fullscreen').textContent === 'Fullscreen'`);
   assert(await evaluate(`document.getElementById('fullscreen').textContent === 'Fullscreen'`), 'Fullscreen exit');
+  await call('Emulation.setDeviceMetricsOverride', { width: 2560, height: 1440, deviceScaleFactor: 3, mobile: false });
+  await sleep(500);
+  const buffer = await evaluate(`(() => { const c=document.querySelector('iframe').contentDocument.querySelector('canvas'); return {width:c.width,height:c.height,ratio:c.width/c.height}; })()`);
+  assert(buffer.width <= 1920 && buffer.height <= 1080 && Math.abs(buffer.ratio-16/9)<.01, 'High density 2560x1440 desktop respects 1080p buffer cap',buffer);
+  await capture('02-high-density');
   await call('Emulation.setDeviceMetricsOverride', { width: 420, height: 800, deviceScaleFactor: 1, mobile: false });
   await sleep(300);
   assert(await evaluate(`!portfolioGame.isMobileDevice() && !document.getElementById('loading').hidden === false && document.documentElement.scrollWidth <= innerWidth`), 'Narrow desktop remains enabled');
@@ -199,10 +206,10 @@ try {
   await call('Emulation.setTouchEmulationEnabled',{enabled:true,maxTouchPoints:5});
   await go(origin+'/jogos/dinoforce/?lang=en');
   assert(await evaluate(`portfolioGame.isMobileDevice() && !document.querySelector('iframe')`), 'iPad desktop UA blocked');
-  assert(!events.some(e=>e.params?.response?.url.includes('/releases/')), 'Blocked devices make no build requests');
+  assert(!events.some(e=>e.params?.response?.url.includes('/player/')), 'Blocked devices make no build requests');
   await call('Emulation.setTouchEmulationEnabled',{enabled:false});
   await call('Network.setUserAgentOverride',{userAgent:readyState.ua});
-  await call('Network.setBlockedURLs',{urls:['*dbe615824f0ed375026b5a37c67aba43.loader.js*']});
+  await call('Network.setBlockedURLs',{urls:['*Build.loader.js*']});
   await go(origin+'/jogos/dinoforce/?lang=pt');
   await waitFor(`!document.getElementById('retry').hidden`);
   assert(await evaluate(`document.getElementById('status').textContent === 'Não foi possível carregar o jogo. Tente novamente.' && document.getElementById('progress').hidden && !document.querySelector('iframe')`), 'Portuguese loader error and complete disposal');
@@ -234,7 +241,7 @@ try {
   assert(await evaluate(`document.getElementById('fullscreen').disabled && document.getElementById('fullscreen-note').textContent === 'Tela cheia indisponível neste navegador.'`), 'Fullscreen API unavailable (capability simulated)');
   await pointClick('#back'); await pointClick('#exit');
   await waitFor(`location.pathname === '/' && document.getElementById('project-dialog')?.open`);
-  await call('Network.setBlockedURLs',{urls:['*eced52d31d74f57537d048c97606ee28.wasm.unityweb*']});
+  await call('Network.setBlockedURLs',{urls:['*Build.wasm.unityweb*']});
   await go(origin+'/jogos/dinoforce/?lang=pt');
   await waitFor(`!document.getElementById('retry').hidden`,120000);
   assert(await evaluate(`!document.querySelector('iframe') && document.getElementById('progress').hidden`), 'Wasm initialization failure ends loading and disposes frame');
@@ -242,10 +249,12 @@ try {
   await pointClick('#retry');
   await waitFor(`document.getElementById('loading').hidden`,120000);
   assert(await evaluate(`document.querySelectorAll('iframe').length === 1`), 'Retry after initialization failure');
+  assert(!allEvents.some(e => e.method === 'Network.responseReceived' && e.params.response.status >= 400 && e.params.response.url.includes('/player/')), 'Real exported resources have no HTTP errors (injected blocking is recorded separately)');
   fs.writeFileSync(path.join(output,'checks.json'),JSON.stringify(checks,null,2));
   console.log(JSON.stringify(checks));
   await call('Browser.close');
 } finally {
   fs.writeFileSync(path.join(output,'events.json'),JSON.stringify(events,null,2));
+  fs.writeFileSync(path.join(output,'all-events.json'),JSON.stringify(allEvents,null,2));
   socket?.close(); browser.kill();
 }

@@ -91,13 +91,14 @@
         busy = true;
         $("retry").hidden = true;
         await dispose();
+        if (departing) { busy = false; return; }
         loading.hidden = false; status.textContent = text.loading;
         progress.hidden = false; progress.removeAttribute("value");
         $("percent").hidden = false; $("percent").textContent = "";
         frame = document.createElement("iframe");
         frame.title = "DinoForce";
         frame.allow = "autoplay; fullscreen";
-        frame.src = `player.html?v=20261020-1&lang=${language}`;
+        frame.src = `player.html?v=${encodeURIComponent(dinoForceBuild.id)}&lang=${language}`;
         host.append(frame);
         busy = false;
         watchdog = setTimeout(() => fail(new Error("Player initialization timeout")), 180000);
