@@ -225,7 +225,6 @@ function renderProjects() {
                 <span class="project-category">${escapeHtml(project.category)} · ${escapeHtml(project.period)}</span>
                 <h3><button class="project-card-trigger" type="button" data-open-project="${escapeHtml(project.visual)}" aria-haspopup="dialog" aria-controls="project-dialog" aria-label="${escapeHtml(textFor("viewDetailsOf"))} ${escapeHtml(project.title)}">${escapeHtml(project.title)}</button></h3>
                 <p class="project-description">${escapeHtml(project.description)}</p>
-                <span class="project-visit" aria-hidden="true">${escapeHtml(textFor("viewDetails"))} <span>+</span></span>
             </article>
         `;
     }).join("");

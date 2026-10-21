@@ -10,6 +10,8 @@
             exitTitle: "Sair do DinoForce?", exitDescription: "Sair encerra esta sessão e pode perder o progresso. A retomada da partida não é garantida.",
             continue: "Continuar jogando", exit: "Sair do jogo", status: "Status", version: "Versão",
             controls: "Controles", description: "Descrição", technologies: "Tecnologias", credits: "Créditos",
+            resetData: "Limpar dados do jogo", resetConfirm: "Apagar permanentemente todos os dados do DinoForce neste navegador (save, experiencia e preferencias) e reiniciar?",
+            resetSuccess: "Dados apagados.", resetError: "Falha ao apagar os dados. Tente novamente.",
             missing: "Não informado nos materiais disponíveis."
         },
         en: {
@@ -20,6 +22,8 @@
             exitTitle: "Leave DinoForce?", exitDescription: "Leaving ends this session and may lose progress. Resuming the match is not guaranteed.",
             continue: "Keep playing", exit: "Leave game", status: "Status", version: "Version",
             controls: "Controls", description: "Description", technologies: "Technologies", credits: "Credits",
+            resetData: "Clear game data", resetConfirm: "Permanently delete all DinoForce data in this browser (save, experience and preferences) and restart?",
+            resetSuccess: "Game data deleted.", resetError: "Could not delete game data. Please try again.",
             missing: "Not specified in the available materials."
         }
     }[language];
@@ -73,6 +77,7 @@
         ready = false;
         clearTimeout(watchdog);
         fullscreen.disabled = true;
+        $("reset-data").disabled = true;
         const previous = frame;
         frame = null; // Ignore late messages from a discarded attempt.
         if (!previous) return;
@@ -121,9 +126,27 @@
             if (value >= 1) status.textContent = text.initializing;
         } else if (type === "ready") {
             clearTimeout(watchdog); ready = true; loading.hidden = true;
+            $("reset-data").disabled = false;
             fullscreen.disabled = !document.fullscreenEnabled || !$("game-player").requestFullscreen;
             if (fullscreen.disabled) note.textContent = text.noFullscreen;
         } else if (type === "error") void fail(value);
+    });
+    on($("reset-data"), "click", async () => {
+        if (busy || departing || !window.confirm(text.resetConfirm)) return;
+        busy = true;
+        // Stop Unity first so a checkpoint on quit cannot restore the save.
+        await dispose();
+        try {
+            const keys = Object.keys(localStorage).filter(key => key.startsWith("DinoForce."));
+            for (const key of keys) localStorage.removeItem(key);
+            $("reset-note").textContent = text.resetSuccess;
+        } catch (error) {
+            console.error("DinoForce reset", error);
+            $("reset-note").textContent = text.resetError;
+        } finally {
+            busy = false;
+            await start();
+        }
     });
     on($("retry"), "click", start);
     on(fullscreen, "click", async () => {
