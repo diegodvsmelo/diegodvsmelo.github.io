@@ -39,7 +39,16 @@
         [text.technologies, project.stack.join(" · ")], [text.credits, project.credits || text.missing]
     ]) {
         const h = document.createElement("h2"), p = document.createElement("p");
-        h.textContent = label; p.textContent = value; details.append(h, p);
+        h.textContent = label; p.textContent = value;
+        if (label === text.credits && project.creditsUrl && project.licenseUrl) {
+            for (const [title, url] of [["Kenney", project.creditsUrl], ["CC0", project.licenseUrl]]) {
+                const link = document.createElement("a");
+                link.textContent = title; link.href = url;
+                link.target = "_blank"; link.rel = "noopener noreferrer";
+                p.append(" · ", link);
+            }
+        }
+        details.append(h, p);
     }
     const backUrl = new URL("../../", location.href);
     backUrl.searchParams.set("lang", language);

@@ -61,16 +61,16 @@
       start.hidden = true;
       status.textContent = 'Carregando / Loading…';
       const script = document.createElement('script');
-      script.src = 'Build/Build.loader.js';
+      script.src = 'Build/0.3.1.loader.js';
       script.onerror = () => { status.textContent = 'Falha ao carregar o jogo. Recarregue a página. / Load failed. Reload the page.'; };
       script.onload = () => createUnityInstance(canvas, {
-        dataUrl: 'Build/Build.data.unityweb',
-        frameworkUrl: 'Build/Build.framework.js.unityweb',
-        codeUrl: 'Build/Build.wasm.unityweb',
+        dataUrl: 'Build/0.3.1.data.unityweb',
+        frameworkUrl: 'Build/0.3.1.framework.js.unityweb',
+        codeUrl: 'Build/0.3.1.wasm.unityweb',
         streamingAssetsUrl: 'StreamingAssets',
         companyName: "DiegoDavis",
         productName: "DinoForce",
-        productVersion: "0.3",
+        productVersion: "0.3.1",
         autoSyncPersistentDataPath: true,
         fullscreenElementID: 'game',
         matchWebGLToCanvasSize: false,

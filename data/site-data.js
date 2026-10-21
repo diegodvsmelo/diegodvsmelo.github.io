@@ -283,25 +283,29 @@ window.siteData = {
     }
 };
 
-// Verified against the supplied Web export and the game's existing input code.
-// Editorial status and authorship must be supplied by the project owner.
+// Project information and credits supplied by the project owner.
 for (const [language, content] of Object.entries({
     pt: {
         category: "Tower defense 3D", period: "Web",
-        description: "Tower defense com torres de dinossauros, ondas de inimigos, melhorias e fusões em megazords.",
-        controls: "Use o mouse para comprar, posicionar e selecionar torres. Clique com o botão esquerdo para confirmar. Use Escape ou o botão direito do mouse para cancelar o posicionamento.",
-        status: null, credits: null
+        description: "Dino Force é um tower defense 3D inspirado em Super Sentai, com torres de dinossauros robóticos e visual low poly estilizado. Construa suas defesas, desbloqueie melhorias e combine três tipos de torres para formar poderosos Megazords.",
+        controls: "Mouse",
+        status: "Terceira de nove semanas de desenvolvimento",
+        credits: "Kenney — Game Icons, Sci-fi Sounds, Impact Sounds e Interface Sounds. Licença: Creative Commons Zero (CC0). Uso livre em projetos pessoais, educacionais e comerciais. A atribuição é opcional.",
+        creditsUrl: "https://www.kenney.nl/", licenseUrl: "http://creativecommons.org/publicdomain/zero/1.0/"
     },
     en: {
         category: "3D tower defense", period: "Web",
-        description: "Tower defense with dinosaur towers, enemy waves, upgrades, and megazord fusions.",
-        controls: "Use the mouse to buy, place, and select towers. Left-click to confirm. Press Escape or right-click to cancel placement.",
-        status: null, credits: null
+        description: "Dino Force is a 3D tower defense inspired by Super Sentai, featuring robotic dinosaur towers and stylized low poly visuals. Build your defenses, unlock upgrades, and combine three tower types to form powerful Megazords.",
+        controls: "Mouse",
+        status: "Third of nine weeks of development",
+        credits: "Kenney — Game Icons, Sci-fi Sounds, Impact Sounds and Interface Sounds. License: Creative Commons Zero (CC0). Free to use in personal, educational and commercial projects. Attribution is optional.",
+        creditsUrl: "https://www.kenney.nl/", licenseUrl: "http://creativecommons.org/publicdomain/zero/1.0/"
     }
 })) {
-    window.siteData[language].projects.push({
+    window.siteData[language].projects.unshift({
         title: "DinoForce", visual: "dinoforce", ...content,
-        stack: ["Unity", "C#", "WebGL"],
+        stack: ["Unity", "C#", "WebGL", "Scriptable Objects", "Unity Shaders", "Unity uGUI"],
+        repositoryDisabled: true,
         link: "https://github.com/diegodvsmelo/Jogos-Digitais-26.2"
     });
 }
