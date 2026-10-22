@@ -22,6 +22,10 @@
         return url.href;
     };
     for (const key of ["dataUrl", "frameworkUrl", "codeUrl"]) config[key] = assetUrl(config[key]);
+    // These URLs include the build version; a new export gets a new cache key.
+    // Let Unity reuse all three large downloads without another network check.
+    const versionedAssets = new Set([config.dataUrl, config.frameworkUrl, config.codeUrl]);
+    config.cacheControl = url => versionedAssets.has(url) ? "immutable" : /\.bundle(?:[?#]|$)/.test(url) ? "must-revalidate" : "no-store";
     config.streamingAssetsUrl = new URL(config.streamingAssetsUrl, root).href;
     // CSS owns layout; only this observer owns the backing buffer. Unity's
     // automatic synchronization is disabled in the exported configuration.
@@ -55,6 +59,10 @@
         }
     };
     canvas.addEventListener("contextmenu", event => event.preventDefault());
+    canvas.addEventListener("webglcontextlost", event => {
+        event.preventDefault();
+        if (!cancelled) fail(new Error("WebGL context lost"));
+    });
     canvas.addEventListener("wheel", event => { if (!event.ctrlKey && !event.metaKey) event.preventDefault(); }, { passive: false });
     canvas.addEventListener("pointerdown", () => canvas.focus());
     canvas.addEventListener("keydown", event => {

@@ -209,7 +209,7 @@ try {
   assert(!events.some(e=>e.params?.response?.url.includes('/player/')), 'Blocked devices make no build requests');
   await call('Emulation.setTouchEmulationEnabled',{enabled:false});
   await call('Network.setUserAgentOverride',{userAgent:readyState.ua});
-  await call('Network.setBlockedURLs',{urls:['*Build.loader.js*']});
+  await call('Network.setBlockedURLs',{urls:['*.loader.js*']});
   await go(origin+'/jogos/dinoforce/?lang=pt');
   await waitFor(`!document.getElementById('retry').hidden`);
   assert(await evaluate(`document.getElementById('status').textContent === 'Não foi possível carregar o jogo. Tente novamente.' && document.getElementById('progress').hidden && !document.querySelector('iframe')`), 'Portuguese loader error and complete disposal');
@@ -241,7 +241,9 @@ try {
   assert(await evaluate(`document.getElementById('fullscreen').disabled && document.getElementById('fullscreen-note').textContent === 'Tela cheia indisponível neste navegador.'`), 'Fullscreen API unavailable (capability simulated)');
   await pointClick('#back'); await pointClick('#exit');
   await waitFor(`location.pathname === '/' && document.getElementById('project-dialog')?.open`);
-  await call('Network.setBlockedURLs',{urls:['*Build.wasm.unityweb*']});
+  // Remove cached build downloads so this failure test actually reaches the network.
+  await call('Storage.clearDataForOrigin',{origin,storageTypes:'indexeddb,cache_storage'});
+  await call('Network.setBlockedURLs',{urls:['*.wasm.unityweb*']});
   await go(origin+'/jogos/dinoforce/?lang=pt');
   await waitFor(`!document.getElementById('retry').hidden`,120000);
   assert(await evaluate(`!document.querySelector('iframe') && document.getElementById('progress').hidden`), 'Wasm initialization failure ends loading and disposes frame');
