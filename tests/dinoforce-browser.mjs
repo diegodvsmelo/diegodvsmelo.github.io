@@ -115,7 +115,7 @@ try {
   assert(await evaluate(`document.documentElement.lang === 'pt-BR' && new URLSearchParams(location.search).get('lang') === 'pt'`), 'Language switch updates explicit URL');
   await evaluate(`document.querySelector('[data-language="en"]').click()`);
   assert(!events.some(e => e.params?.response?.url.includes('/player/')), 'Portfolio makes no build requests');
-  await evaluate(`document.querySelector('[data-open-project="codice"]').click()`);
+  await evaluate(`document.querySelector('[data-open-project="eita"]').click()`);
   assert(await evaluate(`document.getElementById('project-dialog').open && !document.querySelector('[data-try-dinoforce]')`), 'Other project panel preserved without Try game');
   await evaluate(`document.getElementById('project-dialog').close()`);
   await evaluate(`document.querySelector('[data-open-project="dinoforce"]').scrollIntoView({behavior:'instant',block:'center'}); document.querySelector('[data-open-project="dinoforce"]').click()`);

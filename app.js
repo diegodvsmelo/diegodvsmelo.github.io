@@ -7,6 +7,7 @@ const originalDescription = descriptionMeta?.content;
 let currentLanguage = "pt";
 let copyStatusKey = "";
 let projectDialogTrigger = null;
+let projectPageScroll = 0;
 let restoreFocusAfterDialogClose = true;
 
 const uiText = {
@@ -209,6 +210,7 @@ function safeProjectLink(rawLink) {
 
 function renderProjects() {
     const grid = document.getElementById("projects-grid");
+    document.getElementById("projects-count").textContent = String(contentForLanguage().projects.length).padStart(2, "0");
     grid.innerHTML = contentForLanguage().projects.map((project) => {
         const art = artSymbols[project.visual] || artSymbols.codice;
 
@@ -280,17 +282,40 @@ function setupProjectDialog() {
         projectDialogTrigger = trigger;
         dialog.dataset.project = project.visual;
         populateProjectDialog(project);
+        projectPageScroll = window.scrollY;
         dialog.showModal();
+        document.body.style.setProperty("--modal-scroll-top", `-${projectPageScroll}px`);
         document.body.classList.add("modal-open");
-        closeButton.focus();
+        closeButton.focus({ preventScroll: true });
     });
+    dialog.addEventListener("keydown", event => {
+        if (event.key !== "Tab") return;
+        const controls = [...dialog.querySelectorAll('a[href], button:not(:disabled), [tabindex="0"]')]
+            .filter(element => element.getClientRects().length);
+        const first = controls[0], last = controls[controls.length - 1];
+        if ((event.shiftKey && document.activeElement === first) ||
+            (!event.shiftKey && document.activeElement === last)) {
+            event.preventDefault();
+            (event.shiftKey ? last : first)?.focus();
+        }
+    });
+    let backdropStart = false;
+    dialog.addEventListener("pointerdown", event => { backdropStart = event.target === dialog; });
+    dialog.addEventListener("pointercancel", () => { backdropStart = false; });
     closeButton.addEventListener("click", () => dialog.close());
     dialog.addEventListener("click", (event) => {
-        if (event.target === dialog) dialog.close();
+        if (event.target === dialog && backdropStart) dialog.close();
+        backdropStart = false;
     });
     dialog.addEventListener("close", () => {
         document.body.classList.remove("modal-open");
-        if (restoreFocusAfterDialogClose && projectDialogTrigger?.isConnected) projectDialogTrigger.focus();
+        document.body.style.removeProperty("--modal-scroll-top");
+        window.scrollTo({ top: projectPageScroll, behavior: "instant" });
+        if (restoreFocusAfterDialogClose) {
+            const trigger = projectDialogTrigger?.isConnected ? projectDialogTrigger :
+                document.querySelector(`[data-open-project="${dialog.dataset.project}"]`);
+            trigger?.focus({ preventScroll: true });
+        }
         restoreFocusAfterDialogClose = true;
     });
 }
@@ -329,35 +354,37 @@ function setupMobileMenu() {
 }
 
 function setupClickJuice() {
-    document.addEventListener("pointerdown", (event) => {
-        const control = event.target.closest("a, button");
-        const target = control?.closest(".project-card") || control;
-        if (target && !reducedMotion.matches) target.classList.add("juice-squash");
+    let pressed = null;
+    let origin = null;
+    const clear = () => {
+        pressed?.classList.remove("juice-squash");
+        pressed = null;
+        origin = null;
+    };
+    const press = element => {
+        clear();
+        const control = element.closest("a, button");
+        if (!control || control.disabled || reducedMotion.matches) return;
+        pressed = control.closest(".project-card") || control;
+        pressed.classList.add("juice-squash");
+    };
+    document.addEventListener("pointerdown", event => {
+        if (!event.isPrimary || event.button !== 0) return;
+        press(event.target);
+        origin = { x: event.clientX, y: event.clientY };
     });
-    for (const eventName of ["pointerup", "pointercancel"]) {
-        document.addEventListener(eventName, () => {
-            document.querySelectorAll(".juice-squash").forEach((target) => target.classList.remove("juice-squash"));
-        });
-    }
-    document.addEventListener("keydown", (event) => {
-        if (event.repeat || !["Enter", " "].includes(event.key)) return;
-        const control = event.target.closest("a, button");
-        const target = control?.closest(".project-card") || control;
-        if (target && !reducedMotion.matches) target.classList.add("juice-squash");
+    document.addEventListener("pointermove", event => {
+        if (origin && Math.hypot(event.clientX - origin.x, event.clientY - origin.y) > 8) clear();
+    }, { passive: true });
+    for (const name of ["pointerup", "pointercancel", "lostpointercapture", "keyup", "focusout"])
+        document.addEventListener(name, clear, true);
+    document.addEventListener("scroll", clear, { capture: true, passive: true });
+    window.addEventListener("blur", clear);
+    document.addEventListener("visibilitychange", clear);
+    reducedMotion.addEventListener("change", clear);
+    document.addEventListener("keydown", event => {
+        if (!event.repeat && ["Enter", " "].includes(event.key)) press(event.target);
     });
-    document.addEventListener("keyup", () => {
-        document.querySelectorAll(".juice-squash").forEach((target) => target.classList.remove("juice-squash"));
-    });
-    document.addEventListener("click", (event) => {
-        const control = event.target.closest("a, button");
-        const target = control?.closest(".project-card") || control;
-        if (!target || reducedMotion.matches) return;
-        target.classList.remove("juice-squash");
-        target.classList.remove("juice-pop");
-        void target.offsetWidth;
-        target.classList.add("juice-pop");
-        target.addEventListener("animationend", () => target.classList.remove("juice-pop"), { once: true });
-    }, true);
 }
 
 function setLanguage(language) {
@@ -432,6 +459,7 @@ function copyEmailWithFallback(email) {
         return document.execCommand("copy");
     } finally {
         field.remove();
+        document.getElementById("copy-email").focus({ preventScroll: true });
     }
 }
 
@@ -441,11 +469,14 @@ function setupMailFallback() {
     const status = document.getElementById("mail-copy-status");
     const copyButton = document.getElementById("copy-email");
     let returnFocus = null;
+    let returnProject = null;
 
     function closeFallback() {
         fallback.hidden = true;
         if (returnFocus?.isConnected) {
-            returnFocus.focus();
+            returnFocus.focus({ preventScroll: true });
+        } else if (returnProject) {
+            document.querySelector(`[data-open-project="${returnProject}"]`)?.focus({ preventScroll: true });
         } else {
             document.querySelector('.hero-socials a[href^="mailto:"]')?.focus();
         }
@@ -456,6 +487,7 @@ function setupMailFallback() {
         const mailLink = event.target.closest('a[href^="mailto:"]');
         if (!mailLink) return;
         const dialog = document.getElementById("project-dialog");
+        returnProject = dialog.open ? dialog.dataset.project : null;
         if (dialog.open) {
             returnFocus = projectDialogTrigger;
         } else if (mailLink.closest("#mobile-nav")) {
@@ -510,7 +542,7 @@ document.addEventListener("click", (event) => {
     const url = new URL("jogos/dinoforce/", location.href);
     url.searchParams.set("lang", currentLanguage);
     // Only navigation state; never game progress. URL also works without storage.
-    url.searchParams.set("returnY", String(Math.round(window.scrollY)));
+    url.searchParams.set("returnY", String(Math.round(projectPageScroll)));
     url.searchParams.set("panelY", String(document.getElementById("project-dialog-content").scrollTop));
     const returnUrl = new URL(location.href);
     for (const key of ["lang", "returnY", "panelY"]) returnUrl.searchParams.set(key, url.searchParams.get(key));
